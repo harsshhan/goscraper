@@ -113,14 +113,20 @@ func (a *AcademicsFetch) ScrapeAttendance(html string) (*types.AttendanceRespons
 
 		courseCode := s.Text()
 		if matched, _ := regexp.MatchString(`^\d.*`, courseCode); len(courseCode) > 10 && matched || strings.Contains(strings.ToLower(courseCode), "regular") {
-			conducted := s.NextAll().Eq(4).Text()
-			absent := s.NextAll().Eq(5).Text()
+			conducted := s.NextAll().Eq(5).Text()
+			absent := s.NextAll().Eq(6).Text()
 
 			conductedNum := utils.ParseFloat(conducted)
 			absentNum := utils.ParseFloat(absent)
 			percentage := 0.0
 			if conductedNum != 0 {
 				percentage = ((conductedNum - absentNum) / conductedNum) * 100
+			}
+			if conducted == "" {
+				conducted = "0"
+			}
+			if absent == "" {
+				absent = "0"
 			}
 
 			attendance := types.Attendance{
