@@ -196,14 +196,13 @@ func (a *AcademicsFetch) ScrapeMarks(html string) (*types.MarksResponse, error) 
 
 	for _, table := range htmlTables {
 		table.Find("tr").Each(func(i int, row *goquery.Selection) {
-			
+
 			cells := row.Find("td")
 			courseCode := strings.TrimSpace(cells.Eq(0).Text())
 			courseType := strings.TrimSpace(cells.Eq(1).Text())
 
 			var testPerformance []types.TestPerformance
 			var overallScored, overallTotal float64
-
 
 			cells.Eq(2).Find("table td").Each(func(i int, testCell *goquery.Selection) {
 				testText := strings.Split(strings.TrimSpace(testCell.Text()), ".00")
@@ -223,7 +222,7 @@ func (a *AcademicsFetch) ScrapeMarks(html string) (*types.MarksResponse, error) 
 								}
 								return fmt.Sprintf("%.2f", scored)
 							}(),
-							Total:  fmt.Sprintf("%.2f", total),
+							Total: fmt.Sprintf("%.2f", total),
 						},
 					})
 
